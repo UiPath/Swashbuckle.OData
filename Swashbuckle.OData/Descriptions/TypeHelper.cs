@@ -242,7 +242,7 @@ namespace System.Web.OData
         internal static Type FindType(string fullName)
         {
             return GetLoadedTypes()
-                    .First(t => t.FullName.Equals(fullName));
+                    .FirstOrDefault(t => t.FullName.Equals(fullName));
         }
     }
 }
