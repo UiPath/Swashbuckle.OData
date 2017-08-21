@@ -82,7 +82,5 @@ namespace Swashbuckle.OData
             }
             return returnType;
         }
-
-
     }
 }

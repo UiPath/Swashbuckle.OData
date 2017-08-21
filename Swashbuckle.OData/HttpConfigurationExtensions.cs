@@ -9,9 +9,22 @@ using System.Web.Http.Routing;
 using System.Web.OData.Routing;
 using Newtonsoft.Json;
 using Swashbuckle.OData.Descriptions;
+using Newtonsoft.Json.Serialization;
 
 namespace Swashbuckle.OData
 {
+    public class ShouldSerializeContractResolver : DefaultContractResolver
+    {
+        public new static readonly ShouldSerializeContractResolver Instance = new ShouldSerializeContractResolver();
+
+        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+        {
+            JsonProperty property = base.CreateProperty(member, memberSerialization);
+            property.Ignored = false;
+            return property;
+        }
+    }
+
     public static class HttpConfigurationExtensions
     {
         internal static IEnumerable<ODataRoute> GetODataRoutes(this HttpConfiguration httpConfig)
@@ -48,8 +61,14 @@ namespace Swashbuckle.OData
             Contract.Assume(mediaTypeFormatterCollection != null);
 
             var formatter = mediaTypeFormatterCollection.JsonFormatter;
-            return formatter != null 
-                ? formatter.SerializerSettings 
+
+            if (formatter != null && formatter.SerializerSettings != null)
+            {
+                formatter.SerializerSettings.ContractResolver = ShouldSerializeContractResolver.Instance;
+            }
+
+            return formatter != null
+                ? formatter.SerializerSettings
                 : new JsonSerializerSettings();
         }
 
@@ -60,7 +79,7 @@ namespace Swashbuckle.OData
         {
             Contract.Requires(configuration != null);
             Contract.Requires(oDataRoute != null);
-            return (IServiceProvider)GetODataRootContainerMethod.Invoke(null, new object[] {configuration, oDataRoute.PathRouteConstraint.RouteName});
+            return (IServiceProvider)GetODataRootContainerMethod.Invoke(null, new object[] { configuration, oDataRoute.PathRouteConstraint.RouteName });
         }
 
         public static SwaggerRouteBuilder AddCustomSwaggerRoute(this HttpConfiguration httpConfig, ODataRoute oDataRoute, string routeTemplate)
@@ -79,8 +98,8 @@ namespace Swashbuckle.OData
 
             var swaggerRouteBuilder = new SwaggerRouteBuilder(swaggerRoute);
 
-            httpConfig.Properties.AddOrUpdate(oDataRoute, 
-                key => new List<SwaggerRoute> { swaggerRoute }, 
+            httpConfig.Properties.AddOrUpdate(oDataRoute,
+                key => new List<SwaggerRoute> { swaggerRoute },
                 (key, value) =>
                 {
                     var swaggerRoutes = value as List<SwaggerRoute>;
