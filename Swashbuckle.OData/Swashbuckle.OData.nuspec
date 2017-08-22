@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>UiPath.Swashbuckle.Odata</id>
+    <version>1.0</version>
+    <title>$title$</title>
+    <authors>strosu</authors>
+    <owners>strosu</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Swashbuckle.Odata for swagger.json generation</description>
+    <releaseNotes>First release</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>swashbuckle odata</tags>
+  </metadata>
+</package>
