@@ -60,6 +60,9 @@ namespace Swashbuckle.OData
         {
             var swashbuckleOptions = _config.GetSwashbuckleOptions();
 
+            // Save the current formatter, to be restored once we generated the docunmentation
+            var initialFormatter = _config.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver;
+
             var schemaRegistry = new SchemaRegistry(
                 _config.Configuration.SerializerSettingsOrDefault(),
                 swashbuckleOptions.CustomSchemaMappings,
@@ -103,7 +106,13 @@ namespace Swashbuckle.OData
                 filter.Apply(odataSwaggerDoc, schemaRegistry, _config.GetApiExplorer());
             }
 
-            return MergeODataAndWebApiSwaggerDocs(rootUrl, apiVersion, odataSwaggerDoc);
+            var result = MergeODataAndWebApiSwaggerDocs(rootUrl, apiVersion, odataSwaggerDoc);
+
+            // Restore the initial formatter
+            _config.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver = initialFormatter;
+
+            return result;
+
         }
 
         private SwaggerDocument MergeODataAndWebApiSwaggerDocs(string rootUrl, string apiVersion, SwaggerDocument odataSwaggerDoc)
