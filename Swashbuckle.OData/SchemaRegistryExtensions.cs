@@ -175,14 +175,8 @@ namespace Swashbuckle.OData
         {
             if (messageDirection == MessageDirection.Output)
             {
-                if (type == typeof (long))
-                {
-                    return true;
-                }
-                if (type == typeof(decimal))
-                {
-                    return true;
-                }
+                // Changing this to include all primitives due to complications in including bool return types
+                return type.IsValueType;
             }
             return false;
         }
