@@ -10,6 +10,7 @@ using Swashbuckle.Application;
 using Swashbuckle.OData.Descriptions;
 using Swashbuckle.Swagger;
 using System.Collections.Concurrent;
+using Newtonsoft.Json;
 
 namespace Swashbuckle.OData
 {
@@ -60,11 +61,11 @@ namespace Swashbuckle.OData
         {
             var swashbuckleOptions = _config.GetSwashbuckleOptions();
 
-            // Save the current formatter, to be restored once we generated the docunmentation
-            var initialFormatter = _config.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver;
-
             var schemaRegistry = new SchemaRegistry(
-                _config.Configuration.SerializerSettingsOrDefault(),
+                new JsonSerializerSettings()
+                {
+                    ContractResolver = ShouldSerializeContractResolver.Instance
+                },
                 swashbuckleOptions.CustomSchemaMappings,
                 swashbuckleOptions.SchemaFilters,
                 swashbuckleOptions.ModelFilters,
@@ -107,9 +108,6 @@ namespace Swashbuckle.OData
             }
 
             var result = MergeODataAndWebApiSwaggerDocs(rootUrl, apiVersion, odataSwaggerDoc);
-
-            // Restore the initial formatter
-            _config.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver = initialFormatter;
 
             return result;
 
