@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Web.Http;
-using System.Web.OData.Formatter;
-using System.Web.OData.Routing;
+using Microsoft.AspNet.OData.Formatter;
+using Microsoft.AspNet.OData.Routing;
 using Microsoft.OData.Edm;
 
 namespace Swashbuckle.OData.Descriptions

@@ -192,7 +192,7 @@ namespace Swashbuckle.OData
         /// <param name="assembliesResolver">custom assemblies resolver.</param>
         public void SetAssembliesResolver(IAssembliesResolver assembliesResolver)
         {
-            System.Web.OData.TypeHelper.SetAssembliesResolver(assembliesResolver);
+            Microsoft.AspNet.OData.TypeHelper.SetAssembliesResolver(assembliesResolver);
         }
     }
 }

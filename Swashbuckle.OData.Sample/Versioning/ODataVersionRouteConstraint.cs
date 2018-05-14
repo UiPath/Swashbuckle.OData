@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http.Routing;
-using System.Web.OData.Routing;
+using Microsoft.AspNet.OData.Routing;
 
 namespace SwashbuckleODataSample.Versioning
 {

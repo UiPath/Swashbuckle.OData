@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using System.Web.OData;
+using Microsoft.AspNet.OData;
 using Swashbuckle.Swagger;
 
 namespace Swashbuckle.OData

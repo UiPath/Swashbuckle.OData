@@ -27,7 +27,16 @@ namespace Swashbuckle.OData
             Contract.Assume(fieldInfo != null);
             var value = fieldInfo.GetValue(instance);
             Contract.Assume(value != null || !ensureNonNull);
-            return value != null ? (T)value : default (T);
+            return value != null ? (T)value : default(T);
+        }
+
+        internal static object StaticGetInstanceField(object instance, string fieldName, bool ensureNonNull = false)
+        {
+            var fieldInfo = instance.GetType().GetAllFields().SingleOrDefault(info => info.Name == fieldName);
+            Contract.Assume(fieldInfo != null);
+            var value = fieldInfo.GetValue(instance);
+            Contract.Assume(value != null || !ensureNonNull);
+            return value;
         }
 
         private static IEnumerable<FieldInfo> GetAllFields(this Type type)

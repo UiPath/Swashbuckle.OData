@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -6,10 +7,10 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
-using System.Web.OData.Extensions;
-using System.Web.OData.Routing;
-using System.Web.OData.Routing.Conventions;
-using System.Web.OData.Routing.Template;
+using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNet.OData.Routing.Conventions;
+using Microsoft.AspNet.OData.Routing.Template;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Swashbuckle.OData.Descriptions
@@ -32,16 +33,26 @@ namespace Swashbuckle.OData.Descriptions
             var rootContainer = httpConfig.GetODataRootContainer(oDataRoute);
             var routingConventions = rootContainer.GetServices<IODataRoutingConvention>();
             var attributeRoutingConvention = routingConventions.OfType<AttributeRoutingConvention>().SingleOrDefault();
+            var result = new List<ODataActionDescriptor>();
 
             if (attributeRoutingConvention != null)
             {
-                return attributeRoutingConvention
-                    .GetInstanceField<IDictionary<ODataPathTemplate, HttpActionDescriptor>>("_attributeMappings", true)
-                    .Select(pair => GetODataActionDescriptorFromAttributeRoute(pair.Value, oDataRoute, httpConfig))
-                    .Where(descriptor => descriptor != null);
+                var collection = attributeRoutingConvention.GetInstanceField<ICollection>("_attributeMappings", true);
+
+                foreach (dynamic pair in collection)
+                {
+                    var value = ReflectionExtensions.StaticGetInstanceField(pair, "value", true);
+                    var httpDescriptor = ReflectionExtensions.StaticGetInstanceField(value, "innerDescriptor", true);
+                    var odataDescriptor = GetODataActionDescriptorFromAttributeRoute(httpDescriptor, oDataRoute, httpConfig);
+
+                    if (odataDescriptor == null)
+                        continue;
+
+                    result.Add(odataDescriptor);
+                }
             }
 
-            return new List<ODataActionDescriptor>();
+            return result;
         }
 
         private static ODataActionDescriptor GetODataActionDescriptorFromAttributeRoute(HttpActionDescriptor actionDescriptor, ODataRoute oDataRoute, HttpConfiguration httpConfig)

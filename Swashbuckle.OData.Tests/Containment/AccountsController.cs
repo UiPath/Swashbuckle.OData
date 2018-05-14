@@ -3,9 +3,9 @@ using System.Linq;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Web.OData;
-using System.Web.OData.Extensions;
-using System.Web.OData.Routing;
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNet.OData.Routing;
 using Containment;
 
 namespace Swashbuckle.OData.Tests.Containment

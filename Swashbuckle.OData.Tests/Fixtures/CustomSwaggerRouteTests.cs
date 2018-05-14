@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.OData.Builder;
-using System.Web.OData.Extensions;
-using System.Web.OData.Routing;
-using System.Web.OData.Routing.Conventions;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNet.OData.Routing.Conventions;
 using FluentAssertions;
 using Microsoft.OData.Edm;
 using Microsoft.Owin.Hosting;

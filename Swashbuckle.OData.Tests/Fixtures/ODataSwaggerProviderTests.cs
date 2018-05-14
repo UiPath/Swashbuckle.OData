@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Http.Dispatcher;
-using System.Web.OData.Builder;
-using System.Web.OData.Extensions;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Extensions;
 using FluentAssertions;
 using Microsoft.OData.Edm;
 using Microsoft.Owin.Hosting;
